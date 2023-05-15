@@ -77,6 +77,9 @@ print(args)
 # data = Dataset(root='/tmp/', name=args.dataset, setting='nettack', seed=15)
 data = Dataset(root='/tmp/', name=args.dataset, setting='prognn')
 adj, features, labels = data.adj, data.features, data.labels
+
+print(features)
+
 idx_train, idx_val, idx_test = data.idx_train, data.idx_val, data.idx_test
 
 if args.dataset == 'pubmed':
