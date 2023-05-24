@@ -126,6 +126,7 @@ if args.attack == 'meta' or args.attack == 'nettack':
     if args.attack == 'nettack':
         idx_test = perturbed_data.target_nodes
 
+adj=perturbed_adj.copy()
 np.random.seed(args.seed)
 torch.manual_seed(args.seed)
 
