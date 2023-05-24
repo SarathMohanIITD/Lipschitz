@@ -81,7 +81,7 @@ data = Dataset(root='/tmp/', name=args.dataset, setting='prognn')
 adj, labels = data.adj, data.labels
 features = preprocessing.normalize(data.features)
 features[features.nonzero()]=features[features.nonzero()]+0.1
-features = sp.csr_matrix(features)
+#features = sp.csr_matrix(features)
 print(features)
 
 print(features.shape)
