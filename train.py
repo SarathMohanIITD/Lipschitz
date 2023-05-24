@@ -81,7 +81,12 @@ print(args)
 data = Dataset(root='/tmp/', name=args.dataset, setting='prognn')
 adj, labels = data.adj, data.labels
 features = preprocessing.normalize(data.features)
-features[features.nonzero()]=features[features.nonzero()]+0
+
+features_ptb =features.copy()
+# Feature perturbation
+
+features_ptb[features_ptb.nonzero()]=features_ptb[features_ptb.nonzero()]+0.1
+
 #features = sp.csr_matrix(features)
 # print(features)
 #
@@ -125,62 +130,65 @@ np.random.seed(args.seed)
 torch.manual_seed(args.seed)
 
 ##########################
-if args.bounded == 'y':
-    from bounded_gcn import BoundedGCN
-    #print("Using bounded gcn")
-    model = BoundedGCN(nfeat=features.shape[1],
-                nhid=args.hidden,
-                nclass=labels.max().item() + 1,
-                dropout=args.dropout, device=device,bound=args.bound)
-    #model = GCN(nfeat=features.shape[1],
-    #            nhid=args.hidden,
-    #            nclass=labels.max().item() + 1,
-    #          dropout=args.dropout, device=device)
-    if args.two_stage=="y":
-        from Bounded_two_stage import RwlGNN
-        #print(" Debug ::: Selected Bounded_two_stage ")
-        #print(f'Debug ::: Bound = {args.bound}')
-    else:
-        from BoundedJointLearning import RwlGNN
-else:
-   # from bounded_gcn import BoundedGCN
-    model = GCN(nfeat=features.shape[1],
-                nhid=args.hidden,
-                nclass=labels.max().item() + 1,
-              dropout=args.dropout, device=device)
-    if args.two_stage=="y":
-        from RwlGNN_two import RwlGNN
 
-    else:
-        from RwlGNN import RwlGNN
 
-######################################
+perturbed_adj, features, lab = preprocess(perturbed_adj, features, labels, preprocess_adj=False, device=device)
 
-if args.only_gcn:
+# GCN without ptb
 
-    perturbed_adj, features, labels = preprocess(perturbed_adj, features, labels, preprocess_adj=False, sparse=True, device=device)
+gcn_outputs=model.fit(features, adj, labels, idx_train, idx_val, verbose=True, train_iters=args.epochs)
+model.test(idx_test)
 
-   # features = torch.norm(features,p='fro')
 
-    outputs= model.fit(features, perturbed_adj, labels, idx_train, idx_val, verbose=False, train_iters=args.epochs)
-    model.test(idx_test)
-    for i in range(len(outputs)):
-        outputs[i] = outputs[i].detach().numpy()
-    print(len(outputs))
-    print(outputs)
+##############################################################################################################
 
-else:
-    perturbed_adj, features, labels = preprocess(perturbed_adj, features, labels, preprocess_adj=False, device=device)
 
-    #col_norms = torch.norm(features, dim=0)
-    #features = features/col_norms
+from bounded_gcn import BoundedGCN
+print("Using bounded gcn")
+model = BoundedGCN(nfeat=features.shape[1],
+            nhid=args.hidden,
+            nclass=labels.max().item() + 1,
+            dropout=args.dropout, device=device,bound=args.bound)
+from Bounded_two_stage import RwlGNN
 
-    rwlgnn = RwlGNN(model, args, device)
-    if args.two_stage=="y":
-        adj_new = rwlgnn.fit(features, perturbed_adj)
-        outputs = model.fit(features, adj_new, labels, idx_train, idx_val, verbose=False, train_iters=args.epochs,bound=args.bound) #######
-        model.test(idx_test)
-    else:
-        rwlgnn.fit(features, perturbed_adj, labels, idx_train, idx_val)
-        rwlgnn.test(features, labels, idx_test)
+perturbed_adj1, features_ptb, labels = preprocess(perturbed_adj, features_ptb, labels, preprocess_adj=False, device=device)
 
+rwlgnn = RwlGNN(model, args, device)
+
+adj_new = rwlgnn.fit(features_ptb, perturbed_adj1)
+
+bounded_outputs = model.fit(features_ptb, adj_new, labels, idx_train, idx_val, verbose=False, train_iters=args.epochs,
+          bound=args.bound)
+model.test(idx_test)
+
+
+################################################################################################################
+model = GCN(nfeat=features_ptb.shape[1],
+            nhid=args.hidden,
+            nclass=labels.max().item() + 1,
+            dropout=args.dropout, device=device)
+gcnAtt_outputs=model.fit(features_ptb, perturbed_adj1, labels, idx_train, idx_val, verbose=True, train_iters=args.epochs)
+model.test(idx_test)
+
+###################################################################################################################
+
+
+
+for i in range(len(bounded_outputs)):
+    bounded_outputs[i]=bounded_outputs[i].detach().numpy()
+    gcn_outputs[i]=gcn_outputs[i].detach().numpy()
+    gcnAtt_outputs[i]=gcnAtt_outputs[i].detach().numpy()
+
+#print(bounded_outputs-gcn_outputs)
+
+err1 =np.zeros((len(bounded_outputs), 16))
+err2 = np.zeros((len(bounded_outputs), 16))
+
+for i in range(len(bounded_outputs)):
+    err1[i]=bounded_outputs[i]-gcn_outputs
+    err2[i]=gcnAtt_outputs-gcn_outputs
+
+import matplotlib.pyplot as plt
+
+plt.plot(err1)
+plt.plot(err2)
