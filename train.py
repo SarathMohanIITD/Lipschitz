@@ -8,6 +8,8 @@ from deeprobust.graph.defense import GCN
 from deeprobust.graph.data import Dataset, PrePtbDataset
 from deeprobust.graph.utils import preprocess, encode_onehot, get_train_val_test
 
+from sklearn import preprocessing
+
 
 
 # Training settings
@@ -76,10 +78,13 @@ print(args)
 # but now change the setting from nettack to prognn which directly loads the prognn splits
 # data = Dataset(root='/tmp/', name=args.dataset, setting='nettack', seed=15)
 data = Dataset(root='/tmp/', name=args.dataset, setting='prognn')
-adj, features, labels = data.adj, data.features, data.labels
+adj, labels = data.adj, data.labels
+features = preprocessing.normalize(data.features)+1
+
+print(features)
 
 print(features.shape)
-print(features[2000])
+print(type(features[2000]))
 print(features[0].shape)
 
 idx_train, idx_val, idx_test = data.idx_train, data.idx_val, data.idx_test
