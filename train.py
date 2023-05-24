@@ -193,5 +193,5 @@ err1 = bounded_outputs-gcn_outputs
 err2 = gcnAtt_outputs-gcn_outputs
 
 #
-print(torch.norm(err1))
-print(torch.norm(err2))
+print(f'{torch.norm(err1)}')
+print(f'{torch.norm(err2)}')
