@@ -187,6 +187,10 @@ err2 = gcnAtt_outputs-gcn_outputs
 
 #
 err1 = torch.linalg.norm(err1, dim=1)
-print(err1.shape)
-print(err1)
-#print(f'{torch.norm(err2)}')
+err1 =torch.linalg.norm(err1)
+
+err2 = torch.linalg.norm(err2, dim=1)
+err2 =torch.linalg.norm(err2)
+
+print(f'{torch.norm(err1)}')
+print(f'{torch.norm(err2)}')
