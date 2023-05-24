@@ -181,8 +181,8 @@ for i in range(len(bounded_outputs)):
 
 #print(bounded_outputs-gcn_outputs)
 
-err1 =np.zeros((len(bounded_outputs), 16))
-err2 = np.zeros((len(bounded_outputs), 16))
+err1 =np.zeros((len(bounded_outputs), 7))
+err2 = np.zeros((len(bounded_outputs), 7))
 
 for i in range(len(bounded_outputs)):
     err1[i]=bounded_outputs[i]-gcn_outputs[i]
