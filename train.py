@@ -79,7 +79,7 @@ print(args)
 # data = Dataset(root='/tmp/', name=args.dataset, setting='nettack', seed=15)
 data = Dataset(root='/tmp/', name=args.dataset, setting='prognn')
 adj, labels = data.adj, data.labels
-features = preprocessing.normalize(data.features)+1
+features = preprocessing.normalize(data.features)
 features_dense = features.toarray()
 features_dense += 0.1
 features = sp.csr_matrix(features_dense)
