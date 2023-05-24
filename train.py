@@ -173,22 +173,22 @@ gcn_outputs=model.test(idx_test)
 
 ##############################################################################################################
 print(len(bounded_outputs),len(gcn_outputs),len(gcnAtt_outputs))
-
-for i in range(len(bounded_outputs)):
-    bounded_outputs[i]=bounded_outputs[i].detach().numpy()
-    gcn_outputs[i]=gcn_outputs[i].detach().numpy()
-    gcnAtt_outputs[i]=gcnAtt_outputs[i].detach().numpy()
-
-#print(bounded_outputs-gcn_outputs)
-
-err1 =np.zeros((len(bounded_outputs), 7))
-err2 = np.zeros((len(bounded_outputs), 7))
-
-for i in range(len(bounded_outputs)):
-    err1[i]=bounded_outputs[i]-gcn_outputs[i]
-    err2[i]=gcnAtt_outputs-gcn_outputs[i]
-
-import matplotlib.pyplot as plt
-
-plt.plot(err1)
-plt.plot(err2)
+print(type(bounded_outputs))
+# for i in range(len(bounded_outputs)):
+#     bounded_outputs[i]=bounded_outputs[i].detach().numpy()
+#     gcn_outputs[i]=gcn_outputs[i].detach().numpy()
+#     gcnAtt_outputs[i]=gcnAtt_outputs[i].detach().numpy()
+#
+# #print(bounded_outputs-gcn_outputs)
+#
+# err1 =np.zeros((len(bounded_outputs), 7))
+# err2 = np.zeros((len(bounded_outputs), 7))
+#
+# for i in range(len(bounded_outputs)):
+#     err1[i]=bounded_outputs[i]-gcn_outputs[i]
+#     err2[i]=gcnAtt_outputs-gcn_outputs[i]
+#
+# import matplotlib.pyplot as plt
+#
+# plt.plot(err1)
+# plt.plot(err2)
