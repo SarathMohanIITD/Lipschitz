@@ -78,7 +78,9 @@ print(args)
 data = Dataset(root='/tmp/', name=args.dataset, setting='prognn')
 adj, features, labels = data.adj, data.features, data.labels
 
-print(features[0])
+print(features.shape)
+print(features[2000])
+print(features[0].shape)
 
 idx_train, idx_val, idx_test = data.idx_train, data.idx_val, data.idx_test
 
