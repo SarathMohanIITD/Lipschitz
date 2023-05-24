@@ -192,7 +192,7 @@ class GCN(nn.Module):
                 self._train_with_early_stopping(labels, idx_train, idx_val, train_iters, patience, verbose)
             else:
                 self._train_with_val(labels, idx_train, idx_val, train_iters, verbose)
-        return self.list
+
 
     def _train_without_val(self, labels, idx_train, train_iters, verbose):
         self.train()
@@ -230,8 +230,8 @@ class GCN(nn.Module):
                 print('Epoch {}, training loss: {}'.format(i, loss_train.item()))
 
             self.eval()
-            if i%10==0:
-                self.list.append(emb)
+            #if i%10==0:
+            #    self.list.append(emb)
             output,emb = self.forward(self.features, self.adj_norm)
             loss_val = F.nll_loss(output[idx_val], labels[idx_val])
             acc_val = utils.accuracy(output[idx_val], labels[idx_val])
@@ -310,7 +310,7 @@ class GCN(nn.Module):
         print("Test set results:",
               "loss= {:.4f}".format(loss_test.item()),
               "accuracy= {:.4f}".format(acc_test.item()))
-        return acc_test.item()
+        return emb
 
 
     def predict(self, features=None, adj=None):

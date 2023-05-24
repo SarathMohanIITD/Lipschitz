@@ -148,9 +148,9 @@ rwlgnn = RwlGNN(model, args, device)
 
 adj_new = rwlgnn.fit(features_ptb, perturbed_adj1)
 
-bounded_outputs = model.fit(features_ptb, adj_new, labels, idx_train, idx_val, verbose=False, train_iters=args.epochs,
+model.fit(features_ptb, adj_new, labels, idx_train, idx_val, verbose=False, train_iters=args.epochs,
           bound=args.bound)
-model.test(idx_test)
+bounded_outputs=model.test(idx_test)
 
 
 ################################################################################################################
@@ -158,8 +158,8 @@ model = GCN(nfeat=features_ptb.shape[1],
             nhid=args.hidden,
             nclass=labels.max().item() + 1,
             dropout=args.dropout, device=device)
-gcnAtt_outputs=model.fit(features_ptb, perturbed_adj1, labels, idx_train, idx_val, verbose=True, train_iters=args.epochs)
-model.test(idx_test)
+model.fit(features_ptb, perturbed_adj1, labels, idx_train, idx_val, verbose=True, train_iters=args.epochs)
+gcnAtt_outputs=model.test(idx_test)
 
 ###################################################################################################################
 
@@ -167,8 +167,8 @@ perturbed_adj, features, lab = preprocess(perturbed_adj, features, labels, prepr
 
 # GCN without ptb
 
-gcn_outputs=model.fit(features, adj, labels, idx_train, idx_val, verbose=True, train_iters=args.epochs)
-model.test(idx_test)
+model.fit(features, adj, labels, idx_train, idx_val, verbose=True, train_iters=args.epochs)
+gcn_outputs=model.test(idx_test)
 
 
 ##############################################################################################################
