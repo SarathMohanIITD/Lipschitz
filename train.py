@@ -143,15 +143,17 @@ model = BoundedGCN(nfeat=features.shape[1],
 from Bounded_two_stage import RwlGNN
 
 adj_1, features_1, labels_1 = preprocess(adj, features, labels, preprocess_adj=False, device=device)
+adj_2,features_2,labels_2 = preprocess(adj, features_ptb, labels, preprocess_adj=False, device=device)
+
 
 rwlgnn = RwlGNN(model, args, device)
-
+#######################################################################################################
 adj_new = rwlgnn.fit(features_1, adj_1)
 
 model.fit(features_1, adj_new, labels_1, idx_train, idx_val, verbose=False, train_iters=args.epochs,bound=args.bound)
 bounded_outputs=model.test(idx_test)
 
-adj_2,features_2,labels_2 = preprocess(adj, features_ptb, labels, preprocess_adj=False, device=device)
+###############################################################################################
 adj_new = rwlgnn.fit(features_2, adj_2)
 model.fit(features_2, adj_new, labels_2, idx_train, idx_val, verbose=False, train_iters=args.epochs,bound=args.bound)
 ptb_bounded_outputs=model.test(idx_test)
@@ -161,18 +163,18 @@ model = GCN(nfeat=features_ptb.shape[1],
             nhid=args.hidden,
             nclass=labels.max().item() + 1,
             dropout=args.dropout, device=device)
-model.fit(features_1, adj_1, labels_1, idx_train, idx_val, verbose=False, train_iters=args.epochs)
+model.fit(features_2, adj_2, labels_2, idx_train, idx_val, verbose=False, train_iters=args.epochs)
 gcnAtt_outputs=model.test(idx_test)
 
 ###################################################################################################################
 
 
 
-adj_3, features_3, labels_3 = preprocess(adj, features, labels, preprocess_adj=False, device=device)
+#adj_3, features_3, labels_3 = preprocess(adj, features, labels, preprocess_adj=False, device=device)
 
 # GCN without ptb
 
-model.fit(features_3, adj_3, labels_3, idx_train, idx_val, verbose=False, train_iters=args.epochs)
+model.fit(features_1, adj_1, labels_1, idx_train, idx_val, verbose=False, train_iters=args.epochs)
 gcn_outputs=model.test(idx_test)
 
 
