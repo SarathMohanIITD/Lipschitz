@@ -175,7 +175,7 @@ gcn_outputs=model.test(idx_test)
 print(len(bounded_outputs),len(gcn_outputs),len(gcnAtt_outputs))
 print(type(bounded_outputs))
 
-print(f'{gcn_outputs}')
+print(f'{gcnAtt_outputs}')
 
 err1 = bounded_outputs-gcn_outputs
 err2 = gcnAtt_outputs-gcn_outputs
