@@ -172,7 +172,7 @@ model.test(idx_test)
 
 
 ##############################################################################################################
-
+print(len(bounded_outputs),len(gcn_outputs),len(gcnAtt_outputs))
 
 for i in range(len(bounded_outputs)):
     bounded_outputs[i]=bounded_outputs[i].detach().numpy()
