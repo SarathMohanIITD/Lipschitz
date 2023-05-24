@@ -142,7 +142,7 @@ model = BoundedGCN(nfeat=features.shape[1],
             dropout=args.dropout, device=device,bound=args.bound)
 from Bounded_two_stage import RwlGNN
 
-adj_1, features_1, labels_1 = preprocess(adj, features, labels, preprocess_adj=False, device=device)
+adj_1, features_1, labels_1 = preprocess(adj, features_ptb, labels, preprocess_adj=False, device=device)
 
 rwlgnn = RwlGNN(model, args, device)
 
@@ -151,7 +151,7 @@ adj_new = rwlgnn.fit(features_1, adj_1)
 model.fit(features_1, adj_new, labels_1, idx_train, idx_val, verbose=False, train_iters=args.epochs,bound=args.bound)
 bounded_outputs=model.test(idx_test)
 
-
+adj_2,features_2,lables_2 = preprocess(adj, features, labels, preprocess_adj=False, device=device)
 ################################################################################################################
 model = GCN(nfeat=features_ptb.shape[1],
             nhid=args.hidden,
