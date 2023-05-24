@@ -142,13 +142,13 @@ model = BoundedGCN(nfeat=features.shape[1],
             dropout=args.dropout, device=device,bound=args.bound)
 from Bounded_two_stage import RwlGNN
 
-perturbed_adj1, features_ptb, labels = preprocess(perturbed_adj, features_ptb, labels, preprocess_adj=False, device=device)
+adj_1, features_1, labels_1 = preprocess(perturbed_adj, features_ptb, labels, preprocess_adj=False, device=device)
 
 rwlgnn = RwlGNN(model, args, device)
 
-adj_new = rwlgnn.fit(features_ptb, perturbed_adj1)
+adj_new = rwlgnn.fit(features_1, adj_1)
 
-model.fit(features_ptb, adj_new, labels, idx_train, idx_val, verbose=False, train_iters=args.epochs,
+model.fit(features_1, adj_new, labels_1, idx_train, idx_val, verbose=False, train_iters=args.epochs,
           bound=args.bound)
 bounded_outputs=model.test(idx_test)
 
@@ -158,16 +158,16 @@ model = GCN(nfeat=features_ptb.shape[1],
             nhid=args.hidden,
             nclass=labels.max().item() + 1,
             dropout=args.dropout, device=device)
-model.fit(features_ptb, perturbed_adj1, labels, idx_train, idx_val, verbose=True, train_iters=args.epochs)
+model.fit(features_1, adj_1, labels_1, idx_train, idx_val, verbose=False, train_iters=args.epochs)
 gcnAtt_outputs=model.test(idx_test)
 
 ###################################################################################################################
 
-perturbed_adj, features, lab = preprocess(perturbed_adj, features, labels, preprocess_adj=False, device=device)
+adj_2, features_2, lab_2 = preprocess(perturbed_adj, features, labels, preprocess_adj=False, device=device)
 
 # GCN without ptb
 
-model.fit(features, adj, labels, idx_train, idx_val, verbose=True, train_iters=args.epochs)
+model.fit(features_2, adj_2, labels_2, idx_train, idx_val, verbose=False, train_iters=args.epochs)
 gcn_outputs=model.test(idx_test)
 
 
