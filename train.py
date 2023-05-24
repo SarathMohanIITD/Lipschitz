@@ -163,7 +163,7 @@ gcnAtt_outputs=model.test(idx_test)
 
 ###################################################################################################################
 
-adj_2, features_2, lab_2 = preprocess(perturbed_adj, features, labels, preprocess_adj=False, device=device)
+adj_2, features_2, labels_2 = preprocess(perturbed_adj, features, labels, preprocess_adj=False, device=device)
 
 # GCN without ptb
 
