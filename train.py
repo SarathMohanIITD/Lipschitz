@@ -166,7 +166,7 @@ if args.only_gcn:
     model.test(idx_test)
     for i in range(len(outputs)):
         outputs[i] = outputs[i].detach().numpy()
-    print(outputs.shape)
+    print(len(outputs))
     print(outputs)
 
 else:
