@@ -132,15 +132,6 @@ torch.manual_seed(args.seed)
 ##########################
 
 
-perturbed_adj, features, lab = preprocess(perturbed_adj, features, labels, preprocess_adj=False, device=device)
-
-# GCN without ptb
-
-gcn_outputs=model.fit(features, adj, labels, idx_train, idx_val, verbose=True, train_iters=args.epochs)
-model.test(idx_test)
-
-
-##############################################################################################################
 
 
 from bounded_gcn import BoundedGCN
@@ -172,6 +163,15 @@ model.test(idx_test)
 
 ###################################################################################################################
 
+perturbed_adj, features, lab = preprocess(perturbed_adj, features, labels, preprocess_adj=False, device=device)
+
+# GCN without ptb
+
+gcn_outputs=model.fit(features, adj, labels, idx_train, idx_val, verbose=True, train_iters=args.epochs)
+model.test(idx_test)
+
+
+##############################################################################################################
 
 
 for i in range(len(bounded_outputs)):
