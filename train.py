@@ -188,7 +188,10 @@ print(type(bounded_outputs))
 #     err1[i]=bounded_outputs[i]-gcn_outputs[i]
 #     err2[i]=gcnAtt_outputs-gcn_outputs[i]
 #
-# import matplotlib.pyplot as plt
+
+err1 = bounded_outputs-gcn_outputs
+err2 = gcnAtt_outputs-gcn_outputs
+import matplotlib.pyplot as plt
 #
-# plt.plot(err1)
-# plt.plot(err2)
+plt.plot(err1)
+plt.plot(err2)
