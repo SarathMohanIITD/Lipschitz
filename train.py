@@ -186,7 +186,7 @@ err1 = ptb_bounded_outputs-bounded_outputs
 err2 = gcnAtt_outputs-gcn_outputs
 
 #
-err1 = torch.linalg.matrix_norm(err1, dim=1)
+err1 = torch.linalg.norm(err1, dim=1)
 print(err1.shape)
 print(err1)
 #print(f'{torch.norm(err2)}')
