@@ -83,11 +83,11 @@ adj, labels = data.adj, data.labels
 features = preprocessing.normalize(data.features)
 features[features.nonzero()]=features[features.nonzero()]+0
 #features = sp.csr_matrix(features)
-print(features)
-
-print(features.shape)
-print(type(features[2000]))
-print(features[0].shape)
+# print(features)
+#
+# print(features.shape)
+# print(type(features[2000]))
+# print(features[0].shape)
 
 idx_train, idx_val, idx_test = data.idx_train, data.idx_val, data.idx_test
 
