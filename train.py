@@ -148,7 +148,7 @@ rwlgnn = RwlGNN(model, args, device)
 
 adj_new = rwlgnn.fit(features_1, adj_1)
 
-model.fit(features_1, adj_new, labels_1, idx_train, idx_val, verbose=False, train_iters=args.epochs,
+model.fit(features_1, adj_1, labels_1, idx_train, idx_val, verbose=False, train_iters=args.epochs,
           bound=args.bound)
 bounded_outputs=model.test(idx_test)
 
