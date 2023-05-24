@@ -152,6 +152,8 @@ model.fit(features_1, adj_new, labels_1, idx_train, idx_val, verbose=False, trai
 bounded_outputs=model.test(idx_test)
 
 adj_2,features_2,lables_2 = preprocess(adj, features, labels, preprocess_adj=False, device=device)
+
+
 ################################################################################################################
 model = GCN(nfeat=features_ptb.shape[1],
             nhid=args.hidden,
@@ -162,11 +164,13 @@ gcnAtt_outputs=model.test(idx_test)
 
 ###################################################################################################################
 
-adj_2, features_2, labels_2 = preprocess(adj, features, labels, preprocess_adj=False, device=device)
+
+
+adj_3, features_3, labels_3 = preprocess(adj, features, labels, preprocess_adj=False, device=device)
 
 # GCN without ptb
 
-model.fit(features_2, adj_2, labels_2, idx_train, idx_val, verbose=False, train_iters=args.epochs)
+model.fit(features_3, adj_3, labels_3, idx_train, idx_val, verbose=False, train_iters=args.epochs)
 gcn_outputs=model.test(idx_test)
 
 
