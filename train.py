@@ -4,7 +4,8 @@ import argparse
 import numpy as np
 import torch
 
-from deeprobust.graph.defense import GCN
+#from deeprobust.graph.defense import GCN
+from gcn import GCN
 from deeprobust.graph.data import Dataset, PrePtbDataset
 from deeprobust.graph.utils import preprocess, encode_onehot, get_train_val_test
 
@@ -32,7 +33,7 @@ parser.add_argument('--no-cuda', action='store_true', default=False,
 parser.add_argument('--seed', type=int, default=15, help='Random seed.')
 parser.add_argument('--lr', type=float, default=0.01,
                     help='Initial learning rate for GNN model.')
-parser.add_argument('--weight_decay', type=float, default=5e-4,
+parser.add_argument('--weight_decay', type=float, default=0,
                     help='Weight decay (L2 loss on parameters).')
 parser.add_argument('--hidden', type=int, default=16,
                     help='Number of hidden units.')
@@ -80,8 +81,8 @@ print(args)
 data = Dataset(root='/tmp/', name=args.dataset, setting='prognn')
 adj, labels = data.adj, data.labels
 features = preprocessing.normalize(data.features)
-features[features.nonzero()]=features[features.nonzero()]+0.1
-features = sp.csr_matrix(features)
+features[features.nonzero()]=features[features.nonzero()]+0
+#features = sp.csr_matrix(features)
 print(features)
 
 print(features.shape)
@@ -161,9 +162,10 @@ if args.only_gcn:
 
    # features = torch.norm(features,p='fro')
 
-    model.fit(features, perturbed_adj, labels, idx_train, idx_val, verbose=True, train_iters=args.epochs)
+    output= model.fit(features, perturbed_adj, labels, idx_train, idx_val, verbose=False, train_iters=args.epochs)
     model.test(idx_test)
-
+    print(output.shape)
+    print(output)
 
 else:
     perturbed_adj, features, labels = preprocess(perturbed_adj, features, labels, preprocess_adj=False, device=device)
@@ -174,7 +176,7 @@ else:
     rwlgnn = RwlGNN(model, args, device)
     if args.two_stage=="y":
         adj_new = rwlgnn.fit(features, perturbed_adj)
-        model.fit(features, adj_new, labels, idx_train, idx_val, verbose=False, train_iters=args.epochs,bound=args.bound) #######
+        output = model.fit(features, adj_new, labels, idx_train, idx_val, verbose=False, train_iters=args.epochs,bound=args.bound) #######
         model.test(idx_test)
     else:
         rwlgnn.fit(features, perturbed_adj, labels, idx_train, idx_val)
