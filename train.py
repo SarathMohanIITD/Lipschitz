@@ -142,7 +142,7 @@ model = BoundedGCN(nfeat=features.shape[1],
             dropout=args.dropout, device=device,bound=args.bound)
 from Bounded_two_stage import RwlGNN
 
-adj_1, features_1, labels_1 = preprocess(adj, features_ptb, labels, preprocess_adj=False, device=device)
+adj_1, features_1, labels_1 = preprocess(adj, features, labels, preprocess_adj=False, device=device)
 
 rwlgnn = RwlGNN(model, args, device)
 
@@ -151,8 +151,10 @@ adj_new = rwlgnn.fit(features_1, adj_1)
 model.fit(features_1, adj_new, labels_1, idx_train, idx_val, verbose=False, train_iters=args.epochs,bound=args.bound)
 bounded_outputs=model.test(idx_test)
 
-adj_2,features_2,lables_2 = preprocess(adj, features, labels, preprocess_adj=False, device=device)
-
+adj_2,features_2,labels_2 = preprocess(adj, features_ptb, labels, preprocess_adj=False, device=device)
+adj_new = rwlgnn.fit(features_2, adj_2)
+model.fit(features_2, adj_new, labels_2, idx_train, idx_val, verbose=False, train_iters=args.epochs,bound=args.bound)
+ptb_bounded_outputs=model.test(idx_test)
 
 ################################################################################################################
 model = GCN(nfeat=features_ptb.shape[1],
@@ -180,9 +182,11 @@ print(type(bounded_outputs))
 
 print(f'{bounded_outputs}')
 
-err1 = bounded_outputs-gcn_outputs
+err1 = ptb_bounded_outputs-bounded_outputs
 err2 = gcnAtt_outputs-gcn_outputs
 
 #
-print(f'{torch.norm(err1)}')
-print(f'{torch.norm(err2)}')
+err1 = torch.linalg.matrix_norm(err1, dim=1)
+print(err1.shape)
+print(err1)
+#print(f'{torch.norm(err2)}')
