@@ -193,5 +193,5 @@ err1 = bounded_outputs-gcn_outputs
 err2 = gcnAtt_outputs-gcn_outputs
 import matplotlib.pyplot as plt
 #
-plt.plot(err1)
-plt.plot(err2)
+plt.plot(err1.detach().numpy() )
+plt.plot(err2.detach().numpy() )
