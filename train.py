@@ -9,7 +9,7 @@ from deeprobust.graph.data import Dataset, PrePtbDataset
 from deeprobust.graph.utils import preprocess, encode_onehot, get_train_val_test
 
 from sklearn import preprocessing
-
+import scipy.sparse as sp
 
 
 # Training settings
@@ -80,7 +80,9 @@ print(args)
 data = Dataset(root='/tmp/', name=args.dataset, setting='prognn')
 adj, labels = data.adj, data.labels
 features = preprocessing.normalize(data.features)+1
-
+features_dense = features.toarray()
+features_dense += 0.1
+features = sp.csr_matrix(features_dense)
 print(features)
 
 print(features.shape)
