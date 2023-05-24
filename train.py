@@ -8,7 +8,7 @@ import torch
 from gcn import GCN
 from deeprobust.graph.data import Dataset, PrePtbDataset
 from deeprobust.graph.utils import preprocess, encode_onehot, get_train_val_test
-
+import torch
 from sklearn import preprocessing
 import scipy.sparse as sp
 
@@ -191,7 +191,7 @@ print(type(bounded_outputs))
 
 err1 = bounded_outputs-gcn_outputs
 err2 = gcnAtt_outputs-gcn_outputs
-import matplotlib.pyplot as plt
+
 #
-plt.plot(err1.detach().numpy() )
-plt.plot(err2.detach().numpy() )
+print(torch.norm((err1))
+print(torch.norm((err2)))
