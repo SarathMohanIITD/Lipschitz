@@ -80,7 +80,7 @@ print(args)
 # data = Dataset(root='/tmp/', name=args.dataset, setting='nettack', seed=15)
 data = Dataset(root='/tmp/', name=args.dataset, setting='prognn')
 adj, labels = data.adj, data.labels
-features = preprocessing.normalize(data.features)
+#features = preprocessing.normalize(data.features)
 
 features_ptb =features.copy()
 # Feature perturbation
