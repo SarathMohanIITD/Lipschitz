@@ -125,8 +125,8 @@ if args.attack == 'meta' or args.attack == 'nettack':
     perturbed_adj = perturbed_data.adj
     if args.attack == 'nettack':
         idx_test = perturbed_data.target_nodes
-print(linalg.norm(adj-perturbed_adj))
-exit()
+#print(linalg.norm(adj-perturbed_adj))
+#exit()
 adj=perturbed_adj.copy()
 np.random.seed(args.seed)
 torch.manual_seed(args.seed)
@@ -158,6 +158,7 @@ bounded_outputs=model.test(idx_test)
 ###############################################################################################
 adj_new = rwlgnn.fit(features_2, adj_2)
 model.fit(features_2, adj_new, labels_2, idx_train, idx_val, verbose=False, train_iters=args.epochs,bound=args.bound)
+print(model.gc1.weight)
 ptb_bounded_outputs=model.test(idx_test)
 
 ################################################################################################################
